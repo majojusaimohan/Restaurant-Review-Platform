@@ -40,20 +40,20 @@ public class RestaurantDto {
     private Float averageRating;
 
 
-    private GeoPoint geoLocation;
+    private GeoPointDto geoLocation;
 
 
-    private Address address;
+    private AddressDto address;
 
 
-    private OperatingHours operatingHours;
+    private OperatingHoursDto operatingHours;
 
 
-    private List<Photo> photos= new ArrayList<>();
+    private List<PhotoDto> photos= new ArrayList<>();
 
 
-    private List<Review> reviews= new ArrayList<>();
+    private List<ReviewDto> reviews= new ArrayList<>();
 
 
-    private User createdBy;
+    private UserDto createdBy;
 }
