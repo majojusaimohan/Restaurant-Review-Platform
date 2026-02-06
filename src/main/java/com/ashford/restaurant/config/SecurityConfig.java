@@ -36,6 +36,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(HttpMethod.GET, "/api/photos/**");
+                .requestMatchers(HttpMethod.GET, "/api/photos/**")
+                .requestMatchers(HttpMethod.GET, "/api/restaurants/**");
     }
 }
