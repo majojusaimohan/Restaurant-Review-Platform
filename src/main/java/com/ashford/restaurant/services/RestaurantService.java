@@ -5,6 +5,8 @@ import com.ashford.restaurant.domain.entities.Restaurant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface RestaurantService {
 
     Restaurant createRestaurant(RestaurantCreateUpdateRequest restaurantCreateUpdateRequest);
@@ -19,4 +21,6 @@ public interface RestaurantService {
 
 
     );
+
+    Optional<Restaurant> getRestaurant(String id);
 }
