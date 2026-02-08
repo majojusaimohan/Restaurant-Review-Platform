@@ -2,6 +2,7 @@ package com.ashford.restaurant.controllers;
 
 import com.ashford.restaurant.domain.dtos.ErrorDto;
 import com.ashford.restaurant.exceptions.BaseException;
+import com.ashford.restaurant.exceptions.RestaurantNotFoundException;
 import com.ashford.restaurant.exceptions.StorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,19 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleRestaurantNotFoundException(RestaurantNotFoundException ex){
+        log.error("Caught RestaurantNotFoundException" ,ex);
+
+        ErrorDto errorDto =ErrorDto.builder().
+                status(HttpStatus.NOT_FOUND.value())
+                .message("The Specified restaurant could not be found")
+                .build();
+
+        return new ResponseEntity<>(errorDto,HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
@@ -74,4 +88,6 @@ public class ErrorController {
 
         return new ResponseEntity<>(errorDto,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }

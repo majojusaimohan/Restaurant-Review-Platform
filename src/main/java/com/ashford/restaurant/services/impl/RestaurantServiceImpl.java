@@ -5,6 +5,7 @@ import com.ashford.restaurant.domain.RestaurantCreateUpdateRequest;
 import com.ashford.restaurant.domain.entities.Address;
 import com.ashford.restaurant.domain.entities.Photo;
 import com.ashford.restaurant.domain.entities.Restaurant;
+import com.ashford.restaurant.exceptions.RestaurantNotFoundException;
 import com.ashford.restaurant.repositories.RestaurantRepository;
 import com.ashford.restaurant.services.GeoLocationService;
 import com.ashford.restaurant.services.RestaurantService;
@@ -80,5 +81,30 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Optional<Restaurant> getRestaurant(String id) {
        return restaurantRepository.findById(id);
+    }
+
+    @Override
+    public Restaurant updateRestaurant(String id, RestaurantCreateUpdateRequest restaurantCreateUpdateRequest) {
+        Restaurant restaurant = getRestaurant(id)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant with id " + id + " not found"));
+
+        GeoLocation newGeoLocation=geoLocationService.geoLocate(restaurantCreateUpdateRequest.getAddress());
+        GeoPoint geoPoint = new GeoPoint(newGeoLocation.getLatitude(), newGeoLocation.getLongitude());
+
+        List<String> photoIds = restaurantCreateUpdateRequest.getPhotoIds();
+        List<Photo> photos = photoIds.stream().map(photoUrl -> Photo.builder()
+                .url(photoUrl)
+                .uploadDate(LocalDateTime.now())
+                .build()).toList();
+
+        restaurant.setName(restaurantCreateUpdateRequest.getName());
+        restaurant.setCuisineType(restaurantCreateUpdateRequest.getCuisineType());
+        restaurant.setContactInformation(restaurantCreateUpdateRequest.getContactInformation());
+        restaurant.setAddress(restaurantCreateUpdateRequest.getAddress());
+        restaurant.setGeoLocation(geoPoint);
+        restaurant.setOperatingHours(restaurantCreateUpdateRequest.getOperatingHours());
+        restaurant.setPhotos(photos);
+
+      return  restaurantRepository.save(restaurant);
     }
 }
