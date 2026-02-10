@@ -6,5 +6,5 @@ import com.ashford.restaurant.domain.entities.User;
 
 public interface ReviewService {
 
-    Review cresateReview(User author, String restaurantId, ReviewCreateUpdateRequest review);
+    Review createReview(User author, String restaurantId, ReviewCreateUpdateRequest review);
 }
